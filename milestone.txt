@@ -1,0 +1,18 @@
+Final Project Milestone
+
+We have accomplished the following tasks so far:
+	- Scraped Donald Trump's twitter data from January 2015 through March 2019 (data/trump_posts.csv)
+	- Found the NRC and NRC-VAD lexicons (data/NRC-LEX-ENG and data/NRC-VAD)
+	- Cleaned the raw tweets (text-processing-scripts/pre-process.py)
+		- Tokenized tweets
+		- Lowercase words
+		- Found word stems
+		- Removed stop words 
+		- Output: data/trump_posts_cleaned.csv
+	- Assigned basic emotions and VAD scores to tweets (text-processing-scripts/assign-emotions.py)
+		- Found basic emotions of each word using NRC lexicon
+		- Found VAD scores of each word using VAD lexicon
+		- Aggregated scores of all emotional words in tweets into an 8-by-4 matrix
+		- Output: data/trump_posts_emotions.csv
+	- Researched constaint co-clustering algorithm to cluster tweets based on emotional, semantic and temporal proximity.
+		- Trying to replicate clustering using spectral clustering from the scikit-learn library   

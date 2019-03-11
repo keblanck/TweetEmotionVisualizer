@@ -11,7 +11,7 @@ import numpy as np
 import math
 
 # Define relevant paths
-DATA_PATH = '../data/trump_posts_cleaned_subset.csv'
+DATA_PATH = '../data/trump_posts_cleaned.csv'
 EMOTION_PATH = '../data/NRC-LEX-ENG.csv'
 V_PATH = '../data/NRC-VAD/v-scores.csv'
 A_PATH = '../data/NRC-VAD/a-scores.csv'
@@ -39,7 +39,7 @@ print("len df: {}".format(len(data_df)))
 for index, row in data_df.iterrows():
 
     # total emotional word count
-    emotional_word_count = 0
+    #emotional_word_count = 0
 
     # keep track of 8 emotional words stats (name, count, list of VAD scores)
 
@@ -123,7 +123,7 @@ for index, row in data_df.iterrows():
                 #print("d_data: {}".format(d_data.iloc[0]))
 
                 # update stats
-                emotional_word_count += 1
+                # emotional_word_count += 1
                 for k in emotion_stats.keys():
                     if e_data.iloc[0][k] == 1:
                         #print(emotion_stats[k])
@@ -136,6 +136,8 @@ for index, row in data_df.iterrows():
     # format data as 8-by-4 matrix
     # print(emotion_stats)
     matrix = []
+    emotional_word_count = sum([emotion_stats[k]['count'] for k in emotion_stats.keys()])
+
     for k in emotion_stats.keys():
 
         try:
@@ -156,7 +158,7 @@ for index, row in data_df.iterrows():
     try:
         #print("emotional_state_index: {}".format(data_df.iloc[index]))
         data_df.at[index, 'emotional_state'] = matrix
-        print("matrix in df: {}".format(data_df.iloc[index]['emotional_state']))
+        #print("matrix in df: {}".format(data_df.iloc[index]['emotional_state']))
 
     except IndexError as e:
         print(e)

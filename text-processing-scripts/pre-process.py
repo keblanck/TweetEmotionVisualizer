@@ -11,8 +11,10 @@ import pandas as pd
 import re
 import nltk
 from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 
 STOP_WORDS = set(stopwords.words('english'))
+ps = PorterStemmer()
 
 
 def remove_special_chars(text):
@@ -29,7 +31,7 @@ df = df.dropna(subset=['text', 'created_at'])
 # lowercase + eliminate stop words & special characters
 df['text_cleaned'] = df['text'].apply(lambda x: remove_special_chars(x))
 df['text_cleaned'] = df['text_cleaned'].str.lower().str.split()
-df['text_cleaned'] = df['text_cleaned'].apply(lambda x: [item for item in x if item not in STOP_WORDS])
+df['text_cleaned'] = df['text_cleaned'].apply(lambda x: [ps.stem(item) for item in x if item not in STOP_WORDS])
 df['text_cleaned'] = df['text_cleaned'].apply(lambda x: ' '.join(x))
 
 # TODO: Stem words to better map to lexicons
