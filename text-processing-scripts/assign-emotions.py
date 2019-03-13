@@ -165,4 +165,3 @@ for index, row in data_df.iterrows():
 
 
 data_df.to_csv(OUTPUT_PATH, sep=',', encoding='utf-8', index=False)
-
