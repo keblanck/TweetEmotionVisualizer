@@ -59,19 +59,34 @@ for d, p in zip(durations, principalComponents):
     x.append([d, p[0]])
 x = StandardScaler().fit_transform(x)
 
-# Cluster using K-means
-kmeans = KMeans(n_clusters=100)
-kmeans.fit(x)
+# Time constrain before clustering
+kmeans_labels = []
+batch_no = 0
+for i in range(0, len(x) - 1, 50):
+    batch_no += 1
+
+    if i == len(x) - 51:
+        x_grp = x[i:len(x)]
+    else:
+        x_grp = x[i:i+50]
+
+    # Cluster using K-means
+    kmeans = KMeans(n_clusters=3)
+    kmeans.fit(x_grp)
+
+    labels = [int(str(batch_no) + str(l)) for l in kmeans.labels_]
+    kmeans_labels += labels
+print(len(set(kmeans_labels)))
 
 # Append mood_label and original_emotions to main df
-df['mood_label'] = kmeans.labels_
+df['mood_label'] = kmeans_labels
 df['emotions_vector'] = original_emotions
 
 # Create and format mood df
 mood_df = []
 for mood, group in df.groupby('mood_label'):
 
-    print(mood)
+    #print(mood)
     ev_list = []
     tweets = ''
 
