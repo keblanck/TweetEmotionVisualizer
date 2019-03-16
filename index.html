@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <style>
+        #myTooltip {
+            position: absolute;
+            border: 1px solid black;
+            border-radius: 5px;
+            overflow-x: visible;
+            overflow-y: visible;
+            background-color: white;
+        }
+    </style>
+
+    <style src='./styles/myStyle.css'></style>
+
+    <body>
+        <div id='myTooltip'></div>
+        <div id='menu'></div>
+        <div id='overview'></div>
+        <div id='mainPort'></div>
+        <div id='detailView'></div>
+    </body>
+    
+    <!-- including d3 libraries-->
+    <script src='./scripts/d3.min.js'></script>
+    <script src='./scripts/dataInit.js'></script>
+    <script src='./scripts/menu.js'></script>
+    <script src='./scripts/overview.js'></script>
+    <script src='./scripts/mainPort.js'></script>
+</html>
