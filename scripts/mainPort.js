@@ -161,19 +161,19 @@ function makeStream(feelings, dates, comp, r, sel) {
     
     var domBand = [];
     for (i = 3; i < emoBand.length; i+=7) {
-        var avgV = 0;
+        var avgD = 0;
         var count = 0;
         for (j = -3; j <= 3; j++) {
             if (emoBand[i+j]) {
-                avgV += emoBand[i+j].valence;
+                avgD += emoBand[i+j].dominance;
                 count++;
             }
         }
-        avgV /= count;
+        avgD /= count;
         domBand.push( {
             date: emoBand[i].date,
-            val: avgV,
-            dom: emoBand[i].dominance
+            val: emoBand[i].valence,
+            dom: avgD
         });
     }
 

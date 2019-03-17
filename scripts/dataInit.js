@@ -8,7 +8,7 @@ const shortDim = ['strength', 'val', 'aro', 'dom'];
 //const colors = ['#FF0000', '#FFA500', '#800080', '#008000', '#FFFF00', '#0000A0', 
 //                '#0000FF', '#4CC552'];
 
-const colors = ['#AB1569', '#FA924A', '#5715AB', '#0D6B65', '#F8F844', '#151EAB', '#1569AB', '#15ABA2'];
+const colors = ['#AB1569', '#FA924A', '#6243C5', '#0D6B65', '#F8F844', '#151EAB', '#1569AB', '#7AC285'];
 //const dimColors = ['#AB1569','#15ABA2', '#1569AB', '#A215AB'];
 
 const margin = {
