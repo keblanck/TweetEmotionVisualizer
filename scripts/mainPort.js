@@ -131,14 +131,17 @@ function makeStream(feelings, dates, comp, r, sel) {
         var total = 0.0001;
         var avgV = 0;
         var avgA = 0;
+        var avgD = 0;
         //var totalV = 0.0001;
         for (j = 0; j < 8; j++) {
             total += feelings[i][j][sel];
             avgV += feelings[i][j][1];
             avgA += feelings[i][j][2];
+            avgD += feelings[i][j][2];
         }
         avgV /= 8;
         avgA /= 8;
+        avgD /= 8;
         emoBand.push({
             date: dates[i],
             anger: feelings[i][0][sel]/total,
@@ -151,10 +154,20 @@ function makeStream(feelings, dates, comp, r, sel) {
             trust: feelings[i][7][sel]/total,
             //valence: feelings[i][0][1] //anger's valence
             valence: avgV, //average valence
-            arousal: avgA
+            arousal: avgA,
+            dominance: avgD
         });
     }
     
+    var domBand = [];
+    for (i = 0; i < emoBand.length; i+=7) {
+        domBand.push( {
+            date: emoBand[i].date,
+            val: emoBand[i].valence,
+            dom: emoBand[i].dominance
+        });
+    }
+
     console.log('emoBand');
     console.log(emoBand);
     var emoStack = d3.stack()
@@ -197,7 +210,27 @@ function makeStream(feelings, dates, comp, r, sel) {
             //    bub.selectAll('circle').transition().remove();
             //})
             ;
-            
+    var domValPlot = MP.selectAll('.domValPlot')
+        .data(domBand)
+        .enter().append('g')
+            .attr('class', 'domValPlot')
+            .attr('transform', d=>'translate(' + xMP(d.date) + ',' + ySP(d.val) + ')')
+            ;
+        
+    domValPlot.append('circle')
+            //.attr('class', 'domValPlot')
+        .attr('r', 6)
+        .attr('cx', 0)
+        .attr('cy', 0)
+        .attr('fill', '#585858');
+    domValPlot.append('svg:image')
+        .attr('x', -5.4)
+        .attr('y', -5.4)
+        .attr('transform', d=>'rotate(' + bubTilt(d.dom) + ')')
+        .attr('width', 10.8)
+        .attr('height', 10.8)
+        .attr('xlink:href', 'arrow.png');
+
     MP.append('g')
         .attr('transform', 'translate(-1, 0)').call(yAxisSP)
         .call(g => g.select('.tick:first-of-type').remove())
@@ -255,6 +288,7 @@ function packBub(data) {
 //    bub.selectAll('rect').remove();
 //}
 
+
 // Define the tooltip
 var tooltipBub = d3.select("body")
     .append("div")
@@ -267,6 +301,11 @@ var tooltipBub = d3.select("body")
     .style("border-radius", "6px")
     .style("font", "20px sans-serif")
     .text("tooltip");
+
+var tooltipBub;
+var bubTilt = d3.scaleLinear()
+        .domain([0, 1])
+        .range([-90, 90]);
 
 function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
     if (r > 1) {
@@ -312,9 +351,7 @@ function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
             dom: bubMat[i][3]
         });
     }
-    var bubTilt = d3.scaleLinear()
-        .domain([0, 1])
-        .range([-90, 90]);
+
 
     var bubRoot = packBub(bubData);
     var bubLeaf = bub.selectAll('g.bub')
@@ -334,10 +371,10 @@ function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
         .on("mouseover", function(d) {
           console.log("bubbleData: ", d.data)
           tooltipBub.html("<i>" + d.data.name + "</i>" + "</br>"
-          + "valence: " + (d.data.val).toFixed(2) + "</br>"
-          + "arousal: " + (d.data.aro).toFixed(2) + "</br>"
-          + "dominance: " + (d.data.dom).toFixed(2) + "</br>"
-          + "strength: " + (d.data.strength * 100).toFixed(2) + "%");
+          + "<b>valence:</b> " + (d.data.val).toFixed(2) + "</br>"
+          + "<b>arousal:</b> " + (d.data.aro).toFixed(2) + "</br>"
+          + "<b>dominance:</b> " + (d.data.dom).toFixed(2) + "</br>"
+          + "<b>strength:</b> " + (d.data.strength * 100).toFixed(2) + "%");
           tooltipBub.style("visibility", "visible");
         })
         .on("mousemove", function() {

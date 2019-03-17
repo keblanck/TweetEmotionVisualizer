@@ -124,6 +124,7 @@ function brushedOV() {
     MP.select('.profileMP').attr('d', areaMP);
     MP.select('.xAxisMP').call(xAxisMP);
     MP.selectAll('.streamSP').attr('d', areaSP);
+    MP.selectAll('.domValPlot').attr('transform', d=>'translate(' + xMP(d.date) + ',' + ySP(d.val) + ')');
     //console.log('brush xMP.domain()');
     //console.log(xMP.domain());
     //console.log('brush xOV.domain()');
