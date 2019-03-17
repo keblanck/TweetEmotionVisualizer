@@ -255,7 +255,19 @@ function packBub(data) {
 //    bub.selectAll('rect').remove();
 //}
 
-var tooltipBub;
+// Define the tooltip
+var tooltipBub = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("color", "white")
+    .style("padding", "14px")
+    .style("background-color", "rgba(0, 0, 0, 0.75)")
+    .style("border-radius", "6px")
+    .style("font", "20px sans-serif")
+    .text("tooltip");
+
 function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
     if (r > 1) {
         bub.selectAll('g').remove();
@@ -293,7 +305,7 @@ function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
     var bubData = [];
     for (i = 0; i < 8; i++) {
         bubData.push({
-            name: dimension[i],
+            name: emotions[i],
             strength: bubMat[i][0],
             val: bubMat[i][1],
             aro: bubMat[i][2],
@@ -318,7 +330,22 @@ function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
         .attr('fill-opacity', 0.9)
         //.on('mouseover', (d, i)=>appendTip(d, i))
         //.on('mouseout', d=>removeTip())
-        .attr('fill', (d, i) => d3.rgb(colors[i]).darker([d.data.aro]));
+        .attr('fill', (d, i) => d3.rgb(colors[i]).darker([d.data.aro]))
+        .on("mouseover", function(d) {
+          console.log("bubbleData: ", d.data)
+          tooltipBub.html("<i>" + d.data.name + "</i>" + "</br>"
+          + "valence: " + (d.data.val).toFixed(2) + "</br>"
+          + "arousal: " + (d.data.aro).toFixed(2) + "</br>"
+          + "dominance: " + (d.data.dom).toFixed(2) + "</br>"
+          + "strength: " + (d.data.strength * 100).toFixed(2) + "%");
+          tooltipBub.style("visibility", "visible");
+        })
+        .on("mousemove", function() {
+          return tooltipBub.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function() {
+          return tooltipBub.style("visibility", "hidden");
+        });
     
     bubLeaf.append('svg:image')
         .attr('x', d=>-d.r*0.9)
@@ -327,7 +354,22 @@ function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
         .attr('class', 'bub')
         .attr('width', d=>d.r*1.8)
         .attr('height', d=>d.r*1.8)
-        .attr('xlink:href', 'arrow.png');
+        .attr('xlink:href', 'arrow.png')
+        .on("mouseover", function(d) {
+          console.log("bubbleData: ", d.data)
+          tooltipBub.html("<i>" + d.data.name + "</i>" + "</br>"
+          + "<b>valence:</b> " + (d.data.val).toFixed(2) + "</br>"
+          + "<b>arousal:</b> " + (d.data.aro).toFixed(2) + "</br>"
+          + "<b>dominance:</b> " + (d.data.dom).toFixed(2) + "</br>"
+          + "<b>strength:</b> " + (d.data.strength * 100).toFixed(2) + "%");
+          tooltipBub.style("visibility", "visible");
+        })
+        .on("mousemove", function() {
+          return tooltipBub.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function() {
+          return tooltipBub.style("visibility", "hidden");
+        });
 }
 
 console.log('down');
