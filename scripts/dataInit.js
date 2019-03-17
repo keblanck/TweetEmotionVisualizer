@@ -48,6 +48,8 @@ async function parseFile() {
             }
             dataSrc.push({
                 date: new Date(year, month, day),
+                fullDate: new Date(year, month, day, hour, minute),
+                compDate: (new Date(year, month, day)).getTime(),
                 tweet: datum['text'],
                 RTs: +datum['retweet_count'],
                 favs: +datum['favorite_count'],
@@ -59,7 +61,7 @@ async function parseFile() {
                 mood_mat: []
             });
         });
-        //console.log(dataSrc);
+        console.log(dataSrc);
         return dataSrc;
     });
     return episode;

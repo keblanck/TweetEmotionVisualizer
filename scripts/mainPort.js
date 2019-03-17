@@ -92,7 +92,7 @@ async function drawMP(dataMP) {
                 bub.selectAll('circle').remove();
             })
         .attr('d', areaMP);
-    makeStream(emotionsMP, dates, comp, 0, 0);
+    makeStream(emotionsMP, dates, comp, 0, 0, tweets);
 }
 
 function getDateSP(data, mouseX) {
@@ -105,7 +105,7 @@ function getDateSP(data, mouseX) {
 var yAxisSP;
 var ySP;
 var areaSP;
-function makeStream(feelings, dates, comp, r, sel) {
+function makeStream(feelings, dates, comp, r, sel, tweets) {
     console.log('looking for this');
     console.log(feelings);
     if (r == 1) {
@@ -222,6 +222,7 @@ function makeStream(feelings, dates, comp, r, sel) {
                 num++;
                 var mX = d3.mouse(this);
                 var date = getDateSP(d, mX);
+                drawRawTweets(tweets, date);
                 return makeBubbles(date, comp, feelings, i, mX, num);
             })
             //.on('mouseout', function() {
