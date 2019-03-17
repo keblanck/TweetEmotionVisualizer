@@ -94,14 +94,14 @@ async function drawOV() {
             .attr('width', widthOV)
             .attr('height', heightOV);
     console.log('done drawOV');
-    //svgMP.append('rect')
-    //    .attr('class', 'zoomOV')
-    //    .attr('fill', '#efefef')
+    svgMP.append('rect')
+        .attr('class', 'zoomOV')
+        .attr('fill', 'none')
     //    .attr('fill-opacity', 0.5)
-    //    .attr('width', widthMP)
-    //    .attr('height', heightMP)
-    //    .attr('transform', 'translate(0, 0)')
-    //    .call(zoomOV);
+        .attr('width', widthMP)
+        .attr('height', heightMP)
+        .attr('transform', 'translate(0, 0)')
+        .call(zoomOV);
     console.log('last done drawOV');
 } 
 drawOV();
@@ -115,12 +115,6 @@ function brushedOV() {
     }
     //console.log(xMP.domain());
     xMP.domain(s.map(xOV.invert, xOV));
-    //console.log(xMP.domain());
-    //areaMP = d3.area()
-    //    .curve(d3.curveBasis)
-    //    .x(d=>xMP(d.date))
-    //    .y0(yMP(0))
-    //    .y1(d=>yMP(d.count));
     MP.select('.profileMP').attr('d', areaMP);
     MP.select('.xAxisMP').call(xAxisMP);
     MP.selectAll('.streamSP').attr('d', areaSP);
@@ -142,13 +136,27 @@ function zoomedOV() {
     var t = d3.event.transform;
 
     xMP.domain(t.rescaleX(xOV).domain());
-    console.log('zoom xMP.domain()');
-    console.log(xMP.domain());
-    console.log('zoom xOV.domain()');
-    console.log(xOV.domain());
+    MP.select('profileMP').attr('d', areaMP);
     profileMP.select('.profileMP').attr('d', areaMP);
 
-    profileOV.select('.brushOV').call(brushOV.move, xMP.range().map(t.invertX, t));
+    OV.select('.brushOV').call(brushOV.move, xMP.range().map(t.invertX, t));
 }
 
+function drawOVline(data) {
+    var yOVline = d3.scaleLinear()
+        .domain([-0.5, 1])
+        .range(yOV.range());
+    var lineOV = d3.line()
+        .x((d, i) => xOV(d.date))
+        .y(d => yOVline(d.val))
+        .curve(d3.curveNatural)
+        ;
+    OV.append('path')    
+        .datum(data)
+            .attr('class', 'valLine')
+            .attr('stroke-width', 1)
+            .attr('stroke', 'steelblue')
+            .attr('fill', 'none')
+            .attr('d', lineOV);
 
+}

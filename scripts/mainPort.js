@@ -160,14 +160,33 @@ function makeStream(feelings, dates, comp, r, sel) {
     }
     
     var domBand = [];
-    for (i = 0; i < emoBand.length; i+=7) {
+    for (i = 3; i < emoBand.length; i+=7) {
+        var avgV = 0;
+        var count = 0;
+        for (j = -3; j <= 3; j++) {
+            if (emoBand[i+j]) {
+                avgV += emoBand[i+j].valence;
+                count++;
+            }
+        }
+        avgV /= count;
         domBand.push( {
             date: emoBand[i].date,
-            val: emoBand[i].valence,
+            val: avgV,
             dom: emoBand[i].dominance
         });
     }
 
+    var valLine = [];
+    for (i = 0; i < emoBand.length; i++) {
+        valLine.push( {
+            date: emoBand[i].date,
+            val: emoBand[i].valence
+        });
+    }
+
+    drawOVline(valLine);
+    
     console.log('emoBand');
     console.log(emoBand);
     var emoStack = d3.stack()
@@ -219,16 +238,16 @@ function makeStream(feelings, dates, comp, r, sel) {
         
     domValPlot.append('circle')
             //.attr('class', 'domValPlot')
-        .attr('r', 6)
+        .attr('r', 8)
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('fill', '#585858');
     domValPlot.append('svg:image')
-        .attr('x', -5.4)
-        .attr('y', -5.4)
+        .attr('x', -7.2)
+        .attr('y', -7.2)
         .attr('transform', d=>'rotate(' + bubTilt(d.dom) + ')')
-        .attr('width', 10.8)
-        .attr('height', 10.8)
+        .attr('width', 14.4)
+        .attr('height', 14.4)
         .attr('xlink:href', 'arrow.png');
 
     MP.append('g')
@@ -296,16 +315,16 @@ var tooltipBub = d3.select("body")
     .style("z-index", "10")
     .style("visibility", "hidden")
     .style("color", "white")
-    .style("padding", "14px")
+    .style("padding", "10px")
     .style("background-color", "rgba(0, 0, 0, 0.75)")
     .style("border-radius", "6px")
-    .style("font", "20px sans-serif")
+    .style("font", "16px sans-serif")
     .text("tooltip");
 
 var tooltipBub;
 var bubTilt = d3.scaleLinear()
         .domain([0, 1])
-        .range([-90, 90]);
+        .range([90, -90]);
 
 function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
     if (r > 1) {
@@ -393,7 +412,7 @@ function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
         .attr('height', d=>d.r*1.8)
         .attr('xlink:href', 'arrow.png')
         .on("mouseover", function(d) {
-          console.log("bubbleData: ", d.data)
+          //console.log("bubbleData: ", d.data)
           tooltipBub.html("<i>" + d.data.name + "</i>" + "</br>"
           + "<b>valence:</b> " + (d.data.val).toFixed(2) + "</br>"
           + "<b>arousal:</b> " + (d.data.aro).toFixed(2) + "</br>"
