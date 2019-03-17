@@ -311,7 +311,7 @@ function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
             .attr('class', 'bub')
             .attr('transform', d=> 'translate(' + (d.x + 1) + ',' + (d.y + 1) + ')');
    
-    console.log(bubRoot);
+    //console.log(bubRoot.leaves());
     var bubBase = bubLeaf.append('circle')
         .attr('class', 'bub')
         .attr('r', d=>d.r)
@@ -323,7 +323,7 @@ function makeBubbles(date, dates, feelings, emoIdx, mX, r) {
     bubLeaf.append('svg:image')
         .attr('x', d=>-d.r*0.9)
         .attr('y', d=>-d.r*0.9)
-        .attr('transform', 'rotate(' + bubTilt(d.data.dom) + ')')
+        .attr('transform', d=>'rotate(' + bubTilt(d.data.dom) + ')')
         .attr('class', 'bub')
         .attr('width', d=>d.r*1.8)
         .attr('height', d=>d.r*1.8)
