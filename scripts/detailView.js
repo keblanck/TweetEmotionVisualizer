@@ -190,6 +190,7 @@ function drawTriggerWords(tweets, date) {
     }
 
     triggerData = [];
+    addedWords = [];
 
     d3.csv('trump_trigger_words.csv').then(function(data) {
 
@@ -201,7 +202,10 @@ function drawTriggerWords(tweets, date) {
             d['word'] = d['word'];
 
             if (moodIDs.indexOf(d['mood_id']) != -1) {
-              filteredData.push(d);
+                if (addedWords.indexOf(d['word']) == -1) {
+                    filteredData.push(d);
+                    addedWords.push(d['word']);
+                }
             }
         });
 
