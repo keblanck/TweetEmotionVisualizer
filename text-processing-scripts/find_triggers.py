@@ -10,7 +10,12 @@ from collections import Counter
 
 MOOD_PATH = '../data/trump_tweet_moods.csv'
 OUTPUT_PATH = '../data/trump_trigger_words.csv'
+EMOTION_PATH = '../data/NRC-LEX-ENG.csv'
+EMOTION_LIST = ['Anger', 'Anticipation', 'Disgust',
+                'Fear', 'Joy', 'Sadness',
+                'Surprise', 'Trust']
 
+emotion_df = pd.read_csv(EMOTION_PATH, error_bad_lines=False, index_col=False)
 mood_df = pd.read_csv(MOOD_PATH, error_bad_lines=False, index_col=False)
 
 # Assign tf scores
@@ -51,11 +56,21 @@ for wrd in all_words:
 tf_idf_scores = []
 for s in tf_scores:
 
-    tf_idf_scores.append({
-        'mood_label': s['mood_label'],
-        'word': s['word'],
-        'tf-idf': s['tf'] * idf_scores[s['word']]
-    })
+
+    # query lexicon for emotion type
+    emo = None
+    e_data = emotion_df[emotion_df['English (en)'] == s['word']]
+    if len(e_data):
+        for e in EMOTION_LIST:
+            if e_data.iloc[0][e] == 1:
+                emo = e
+    if emo:
+        tf_idf_scores.append({
+            'mood_label': s['mood_label'],
+            'word': s['word'],
+            'tf-idf': s['tf'] * idf_scores[s['word']],
+            'emotion': emo
+        })
 
 # Store all results
 tf_idf_df = pd.DataFrame(tf_idf_scores)
