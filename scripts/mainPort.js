@@ -38,6 +38,16 @@ function highlightSP(idx, op) {
         })
         .transition()
         .style('fill-opacity', op);
+    if (blockTF) { 
+        if (op == 0.75) 
+            { op = 1; }
+        blockTF.selectAll('text')
+            .filter(function (d, i) {
+                return filteredData[i]['emotion'].toLowerCase() != emotions[idx];
+            })  
+            .transition()
+            .style('fill-opacity', op);
+    }
 }
 async function drawMP(dataMP) {
     console.log('inside');

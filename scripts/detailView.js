@@ -108,7 +108,7 @@ function drawRawTweets(tweets, date) {
 
 
     widthRT = (tweetData.length / 2) * 400;
-    var textWidth = 400;
+    var textWidth = 300;
     var textHeight = heightDV/2;
 
     console.log('changed width svg', svgDV.width);
@@ -163,6 +163,7 @@ function drawRawTweets(tweets, date) {
 }
 
 var blockTF;
+var filteredData = [];
 function drawTriggerWords(tweets, date) {
     if (blockTF) {
         blockTF.selectAll('text').remove();
@@ -192,7 +193,7 @@ function drawTriggerWords(tweets, date) {
 
     d3.csv('trump_trigger_words.csv').then(function(data) {
 
-        var filteredData = [];
+
 
         data.forEach(function(d) {
             d['mood_id'] = +d['mood_label'];
@@ -230,7 +231,13 @@ function drawTriggerWords(tweets, date) {
                 blockTF.append('text')
                     .attr('x', 71 * col)
                     .attr('y', 12 * row + 20)
-                    .attr('fill', emotionToColor[filteredData[i]['emotion']])
+                    .attr('fill', function() {
+                        if (filteredData[i]['emotion'] == 'Joy') {
+                            return d3.rgb(colors[4]).darker([.5]);
+                        } else {
+                            return emotionToColor[filteredData[i]['emotion']];
+                        }
+                    })
                     .text((col*23 + row + 1) + '. ' +  filteredData[i]['word']);
                 row += 1;
                 if (row == 23) {
