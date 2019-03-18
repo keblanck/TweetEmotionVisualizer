@@ -153,6 +153,80 @@ function drawRawTweets(tweets, date) {
     //console.log();
 }
 
+var blockTF;
+function drawTriggerWords(tweets, date) {
+    if (blockTF) {
+        blockTF.selectAll('text').remove();
+        blockTF.selectAll('line').remove();
+    }
+
+    console.log('emo color dict', emotionToColor)
+
+    var textWidth = widthTF;
+    var textHeight = heightDV/2;
+
+    var moodIDs = [];
+
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var day = date.getDate();
+
+    date = new Date(year, month, day);
+
+    for (i = 0; i < tweets.length; i++) {
+        if (tweets[i]['compDate'] == date.getTime()) {
+            moodIDs.push(tweets[i]['mood_id']);
+        }
+    }
+
+    triggerData = [];
+
+    d3.csv('trump_trigger_words.csv').then(function(data) {
+
+        var filteredData = [];
+
+        data.forEach(function(d) {
+            d['mood_id'] = +d['mood_label'];
+            d['tf_idf'] = +d['tf-idf'];
+            d['word'] = d['word'];
+
+            if (moodIDs.indexOf(d['mood_id']) != -1) {
+              filteredData.push(d);
+            }
+        });
+
+        // sort words by tf-idf scores
+        filteredData.sort(function(a, b){
+            return b['tf_idf'] - a['tf_idf'];
+        });
 
 
 
+        console.log('filtered data', filteredData)
+
+        blockTF = TF.append('g')
+            .attr('class', 'rawtext')
+            .attr('fill', 'black')
+            .attr('font-weight', 'normal')
+            .attr('text-anchor', 'start')
+            .style('font', '10px sans-serif')
+            .attr('transform', 'translate(20, 0)');
+
+        var row = 0;
+
+        for (i = 0; i < filteredData.length; i++) {
+
+            blockTF.append('text')
+                .attr('x', 0)
+                .attr('y', 10 * row)
+                .attr('fill', emotionToColor[filteredData[i]['emotion']])
+                .text(filteredData[i]['word']);
+            row += 1;
+
+        }
+
+    });
+
+    console.log('trigger moods', moodIDs);
+
+}

@@ -108,6 +108,9 @@ var areaSP;
 function makeStream(feelings, dates, comp, r, sel, tweets) {
     console.log('looking for this');
     console.log(feelings);
+    console.log('r', r);
+    console.log('sel', sel);
+    console.log('tweets', tweets);
     if (r == 1) {
         MP.selectAll('.streamSP').remove();
         //return;
@@ -223,6 +226,7 @@ function makeStream(feelings, dates, comp, r, sel, tweets) {
                 var mX = d3.mouse(this);
                 var date = getDateSP(d, mX);
                 drawRawTweets(tweets, date);
+                drawTriggerWords(tweets, date);
                 return makeBubbles(date, comp, feelings, i, mX, num);
             })
             //.on('mouseout', function() {

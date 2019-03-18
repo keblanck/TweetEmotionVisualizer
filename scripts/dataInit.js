@@ -8,6 +8,17 @@ const shortDim = ['strength', 'val', 'aro', 'dom'];
 //const colors = ['#FF0000', '#FFA500', '#800080', '#008000', '#FFFF00', '#0000A0', 
 //                '#0000FF', '#4CC552'];
 
+const emotionToColor = {
+    'Anger': '#AB1569',
+    'Anticipation': '#FA924A',
+    'Disgust': '#6243C5',
+    'Fear': '#0D6B65',
+    'Joy': '#F8F844',
+    'Sadness': '#151EAB',
+    'Surprise': '#1569AB',
+    'Trust': '#7AC285'
+}
+
 const colors = ['#AB1569', '#FA924A', '#6243C5', '#0D6B65', '#F8F844', '#151EAB', '#1569AB', '#7AC285'];
 //const dimColors = ['#AB1569','#15ABA2', '#1569AB', '#A215AB'];
 
@@ -161,5 +172,3 @@ async function volume() {
     console.log(emotes);
     return {tweets, dates, count, emotes, comp};
 }
-
-
