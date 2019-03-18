@@ -213,16 +213,23 @@ function drawTriggerWords(tweets, date) {
             .attr('transform', 'translate(20, 0)');
 
         var row = 0;
+        var col = 0;
 
         for (i = 0; i < filteredData.length; i++) {
-
-            blockTF.append('text')
-                .attr('x', 0)
-                .attr('y', 10 * row)
-                .attr('fill', emotionToColor[filteredData[i]['emotion']])
-                .text(filteredData[i]['word']);
-            row += 1;
-
+  
+            if ((col * 23 + row + 1) <= 115) {
+                blockTF.append('text')
+                    .attr('x', 71 * col)
+                    .attr('y', 12 * row + 20)
+                    .attr('fill', emotionToColor[filteredData[i]['emotion']])
+                    .text((col*23 + row + 1) + '. ' +  filteredData[i]['word']);
+                row += 1;
+                if (row == 23) {
+                    row = 0;
+                    col++;
+                }
+            }
+                
         }
 
     });
