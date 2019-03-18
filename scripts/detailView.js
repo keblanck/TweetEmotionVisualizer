@@ -1,5 +1,6 @@
 var svgDV = d3.select('#detailView').append('svg')
-    .attr('width', window.innerWidth - margin.right)
+    //.attr('width', window.innerWidth - margin.right)
+    .attr('width', (window.innerWidth/3 - 10) + 4000)
     .attr('height', window.innerHeight/2.5)
     .attr('text-anchor', 'start')
     .attr('font', '10px sans-serif');
@@ -10,7 +11,7 @@ var heightDV = window.innerHeight/2.5 - margin.bottom;
 var widthTF = window.innerWidth/3 - 10;
 
 //for raw tweet texts FIXME kathleen's
-var widthRT = window.innerWidth * (2/3) - 10;
+var widthRT = window.innerWidth * (2/3) - 10 + 4000;
 
 //Vaish's group for triggers
 var TF = svgDV.append('g')
@@ -20,6 +21,7 @@ TF.append('rect')
     .attr('x', 0)
     .attr('y', 0)
     .attr('height', heightDV)
+    //.attr('y2', 1000)
     .attr('width', widthTF)
     .attr('fill', '#efefef')
     .attr('fill-opacity', 0.3);
@@ -82,8 +84,6 @@ function drawRawTweets(tweets, date) {
         blockRT.selectAll('text').remove();
         blockRT.selectAll('line').remove();
     }
-    var textWidth = widthRT/4;
-    var textHeight = heightDV/2;
     
     var tweetData = [];
     
@@ -95,16 +95,25 @@ function drawRawTweets(tweets, date) {
 
     for (i = 0; i < tweets.length; i++) {
         if (tweets[i]['compDate'] == date.getTime()) {
-            tweetData.push({
-                text: tweets[i]['tweet'],
-                date: tweets[i]['fullDate'],
-                retweets: tweets[i]['RTs'],
-                favorites: tweets[i]['favs']
-            });
+            if (tweetData.length < 20) {
+                tweetData.push({
+                    text: tweets[i]['tweet'],
+                    date: tweets[i]['fullDate'],
+                    retweets: tweets[i]['RTs'],
+                    favorites: tweets[i]['favs']
+                });
+            }
         }
     }
 
-    console.log(tweetData);
+
+    widthRT = (tweetData.length / 2) * 400;
+    var textWidth = 400;
+    var textHeight = heightDV/2;
+
+    console.log('changed width svg', svgDV.width);
+
+    console.log('tweetData', tweetData);
     
     blockRT = RT.append('g')
         .attr('class', 'rawText')
