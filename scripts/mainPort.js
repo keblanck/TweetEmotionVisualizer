@@ -225,6 +225,7 @@ function makeStream(feelings, dates, comp, r, sel, tweets) {
         .data(stackedEmo)
         .enter().append('path')
             .attr('class', 'streamSP')
+            .attr('cursor', 'pointer')
             .attr('fill', function(d, i) { 
                 return colors[i];
                 //return d3.rgb(colors[i]).darker(d.arousal)
