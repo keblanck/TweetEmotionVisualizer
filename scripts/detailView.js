@@ -191,7 +191,7 @@ function drawTriggerWords(tweets, date) {
 
     triggerData = [];
     addedWords = [];
-
+    filteredData = [];
     d3.csv('trump_trigger_words.csv').then(function(data) {
 
 
