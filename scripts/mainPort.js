@@ -212,7 +212,7 @@ function makeStream(feelings, dates, comp, r, sel, tweets) {
     
 
     areaSP = d3.area()
-        .curve(d3.curveMonotoneX)
+        .curve(d3.curveBasis)
         .x(d=>xMP(d.data.date))
         .y0(d=>ySP(d[0] + d.data.valence))
         .y1(d=>ySP(d[1] + d.data.valence));
